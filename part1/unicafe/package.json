@@ -1,8 +1,8 @@
 {
-  "name": "fullstack-open",
-  "author": "Sinval Gomes dos Santos",
-  "description": "Project Full Stack Open 2022 part0.",
+  "name": "unicafe",
   "version": "0.1.0",
+  "author": "Sinval Gomes dos Santos",
+  "description": "Exercicio para o projeto Open Fullstack",
   "private": true,
   "dependencies": {
     "react": "^18.2.0",

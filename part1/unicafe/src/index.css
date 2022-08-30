@@ -1,0 +1,16 @@
+body {
+  margin: 0;
+  padding: 0;
+  font-family: sans-serif;
+}
+App{
+  display: flex;
+  flex-direction: column;
+  margin: 3px;
+  align-items: center;
+
+}
+button{
+  margin: auto;
+  padding: 5px;
+}

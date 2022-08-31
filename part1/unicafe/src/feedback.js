@@ -6,6 +6,7 @@ const Feedback = () => {
   })
 const { good, neutral, bad } = step
 const Good = () => {
+
   const newGood = {
     ...step,
     good: step.good + 1
@@ -27,20 +28,20 @@ const Bad = () => {
 setStep(newBad)
 }
 const total = good + neutral + bad
-const percentualPositivo = total / 100 * good
+const percentGood = good / total * 100
   return(
     <div>
       <h1>Por favor, registre sua opnião sobre nossos serviços<br />
         clicando no botão abaixo:</h1>
-      <button onClick={Good}>Good</button>
-      <button onClick={Neutral}>Neutral</button>
-      <button onClick={Bad}>Bad</button>
+      <button onClick={Good}>Bom</button>
+      <button onClick={Neutral}>Neutro</button>
+      <button onClick={Bad}>Ruim</button>
       <h3>Feedack:</h3>
       <button>Bom: {good}</button>
-      <button>Neutral: {neutral}</button>
-      <button>Bad: {bad}</button>
+      <button>Neutro: {neutral}</button>
+      <button>Ruim: {bad}</button>
       <p>Total feedback: {total}</p>
-      <p>Comentários positivo: {percentualPositivo} %</p>
+      <p>Comentários positivo: {Number.isNaN(percentGood) ? 0 : percentGood} %</p>
     </div>
   )
 

@@ -1,5 +1,3 @@
-import './index.css';
-import { createRoot } from 'react-dom/client';
 import React, { useState } from 'react'
 const Button = (props) => <button onClick={props
                               .handlerClick}>{props
@@ -33,7 +31,7 @@ const Statistics = (props) => {
       </div>
     )
   } else {
-    return <div>No feedback given</div>
+    return <div>No give statistc</div>
   }
 
 }
@@ -55,6 +53,5 @@ const App = () => {
     </div>
   )
 }
-const container = document.getElementById('root');
-const root = createRoot(container);
-root.render(<App />);
+
+export default App

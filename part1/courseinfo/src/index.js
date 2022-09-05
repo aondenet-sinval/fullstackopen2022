@@ -1,5 +1,5 @@
 import React from 'react'
-import ReactDOM from 'react-dom'
+import { createRoot} from 'react-dom/client'
 
 const Header = (props) =>{
   return(
@@ -7,10 +7,20 @@ const Header = (props) =>{
   )
 }
 
-const Content = (props) =>{
+const Part = (props) =>{
   return(
     <div>
       <p>{props.parts} {props.ex}</p>
+    </div>
+  )
+}
+const Content = (props) =>{
+  const course = props.course
+  return(
+    <div>
+      <Part parts={course.parts[0].name} ex={course.parts[0].exercises} />
+      <Part parts={course.parts[1].name} ex={course.parts[1].exercises} />
+      <Part parts={course.parts[2].name} ex={course.parts[2].exercises} />
     </div>
   )
 }
@@ -42,13 +52,13 @@ const App = () => {
   return (
     <React.Fragment>
       <Header course={course.name} />
-      <Content parts={course.parts[0].name} ex={course.parts[0].exercises} />
-      <Content parts={course.parts[1].name} ex={course.parts[1].exercises} />
-      <Content parts={course.parts[2].name} ex={course.parts[2].exercises} />
+      <Content course={course} />
       <Total parts={course.parts[0].exercises + course.parts[1].exercises
       + course.parts[2].exercises} />
     </React.Fragment>
   )
 }
 
-ReactDOM.render(<App />, document.getElementById('root'))
+const container = document.getElementById('root');
+const root = createRoot(container); 
+root.render(<App />);

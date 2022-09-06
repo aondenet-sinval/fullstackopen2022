@@ -27,16 +27,52 @@ const App = (props) => {
     }
 
   const addVote = () => {
-    // const copyAnedocte = [ ...voteAnedocte]
+    // copy anedocte
     setVoteAnedocte( [...voteAnedocte, voteAnedocte[selected][1] += 1] );
+
   }
-  console.log(voteAnedocte[selected][0]);
+  //definition has voted
+  let a = voteAnedocte[0][1];
+  let b = voteAnedocte[1][1];
+  let c = voteAnedocte[2][1];
+  let d = voteAnedocte[3][1];
+  let e = voteAnedocte[4][1];
+  let f = voteAnedocte[5][1];
+  let max = Math.max(a,b,c,d,e,f);
+//return has voted
+const Anedocte = () => {
+  let upAnedocte = voteAnedocte[0][0];
+  for (var i = 0; i < 6; i++)
+  if (voteAnedocte[i][1] === max) {
+    upAnedocte = voteAnedocte[i][0];
+  }
+  if (max > 0) {
+    return(
+      <div>
+      <h1>Anedocte with most votes</h1>
+        <p>{upAnedocte}</p>
+      </div>
+    )
+  }else {
+    return(
+      <div>
+        <p>No voted.</p>
+      </div>
+    )
+  }
+
+}
+
   return(
     <div>
+      <h1>Anedocte of the day</h1>
       <p>{voteAnedocte[selected][0]}</p>
       <p>{voteAnedocte[selected][1]}</p>
       <button onClick={addVote}>votes</button>
       <button onClick={updateAnedocte}>Next Anedocte</button>
+
+      <Anedocte />
+      <p>has {max} votes</p>
     </div>
   )
 }

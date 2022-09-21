@@ -15,5 +15,5 @@
     "eject": "react-scripts eject",
     "server": "json-server -p3001 --watch dbteste.json"
   },
-  "proxy": "http://localhost:3001"
+  "proxy": "https://restcountries.com"
 }

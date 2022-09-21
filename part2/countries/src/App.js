@@ -23,7 +23,7 @@ const Detail = (props)=>{
       <p className={
           show === 'w3-hide'
           ? show
-          : show}>Borders: {countries.borders}</p>
+          : show}>Language native: {countries.nativeLanguage}</p>
           <p className={
               show === 'w3-hide'
               ? show
@@ -42,7 +42,6 @@ const Show = ({result, showValue, setShowValue,
     })
 
     //Selecionar grupos de 1 a 10  países
-    // const show = <button type="submit" onClick={showDetail}>show</button>
     const selectedsGroup =
       paises.map((countries, index) => <li key={index} >
         <b>País:</b> {countries.name.common}
@@ -53,7 +52,9 @@ const Show = ({result, showValue, setShowValue,
     const selectedsDetails =
       paises.map((countries, index) => <li key={index}>
         <h1>{countries.name.common}</h1><br />
-        <b>Capital:</b> {countries.capital}</li>);
+        <b>Capital:</b> {countries.capital}<br />
+        <img width="50%" src={countries.flags.svg} alt="flag" />
+        </li>);
 
   if (selectedsGroup.length < 11 && selectedsGroup.length > 1) {
     return(<div className="w3-left">
@@ -98,7 +99,7 @@ const App = ()=> {
   // const url = "http://localhost:3001"
   useEffect(() => {
   axios
-    .get(`/api/v1`).then(response => {
+    .get(`/v3.1/all`).then(response => {
       setCity(response.data);
     })
 }, [])

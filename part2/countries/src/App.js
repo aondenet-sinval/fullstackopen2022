@@ -2,66 +2,124 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import './App.css';
 
-const Capital = (props) =>{
-  const { capital, newName, newSearch } = props
-
-    const result = capital.find(city => city.capital === newName);
-    // if (result.name) {
-    //   console.log('------------------------');
-    //   // console.log('Código DDI: ', result.callingCodes[0]);
-    //   console.log('País: ', result.name);
-    //   console.log('População: ', result.population);
-    //   console.log('Línguas: ', result.languages[0].name);
-    //   console.log('Região: ', result.region);
-    //   console.log('Moeda: ', result.currencies[0].name);
-    // }
-    let codigo, pais, population, languages, currency;
-    if (result) {
-      codigo =`Código DDI: ${result.callingCodes[0]}`
-      pais = `País: ${result.name}`
-      population = `População: ${result.population}`
-      languages = `Línguas: ${result.languages[0].name}`
-      currency = `Moeda: ${result.currencies[0].name}`
+const Detail = (props)=>{
+  const [show, setShow] = useState('w3-hide')
+  const showDetail = (event) => {
+    if (show === 'w3-hide') {
+      setShow('w3-show')
+    }else {
+      setShow('w3-hide')
     }
 
+  }
+  const { countries, index } = props
+  console.log('countries ', countries);
+
+    return(<div >
+      <p className={
+          show === 'w3-hide'
+          ? show
+          : show}>Capital: {countries.capital}</p>
+      <p className={
+          show === 'w3-hide'
+          ? show
+          : show}>Borders: {countries.borders}</p>
+          <p className={
+              show === 'w3-hide'
+              ? show
+              : show}>Subregião: {countries.subregion}</p>
+      <button name={index} type="submit" onClick={showDetail}>show</button>
+      </div>)
+}
+
+const Show = ({result, showValue, setShowValue,
+            showDetail, showIndice})=>{
+
+  const paises = [];
+  //percorrendo os países e preenchendo o array
+    result.forEach(countrie =>{
+        paises.push(countrie)
+    })
+
+    //Selecionar grupos de 1 a 10  países
+    // const show = <button type="submit" onClick={showDetail}>show</button>
+    const selectedsGroup =
+      paises.map((countries, index) => <li key={index} >
+        <b>País:</b> {countries.name.common}
+          <Detail index={index} showIndice={showIndice}
+                  showValue={showValue}  countries={countries} />
+        </li>);
+    //Selecionar 1 país e apresentar os detalhes
+    const selectedsDetails =
+      paises.map((countries, index) => <li key={index}>
+        <h1>{countries.name.common}</h1><br />
+        <b>Capital:</b> {countries.capital}</li>);
+
+  if (selectedsGroup.length < 11 && selectedsGroup.length > 1) {
+    return(<div className="w3-left">
+            <ul className="list">{selectedsGroup}</ul>
+      </div>
+    )
+  }
+  if (selectedsDetails.length === 1) {
+    return(<div className="w3-left">
+            <ul className="list">{selectedsDetails}</ul>
+      </div>
+    )
+  }
+  //Caso haja mais de 10 ou nenhum país mostrar a mensagem sub
+  if (selectedsGroup.length > 10 && selectedsGroup.length < 20) {
+    return(<div className="w3-left">
+            Too many matches, specify another filter
+      </div>
+    )
+  }
   return(<div>
-          Search city: <input type="text" onBlur={newSearch} />
-
-          <p>{codigo}</p><p>{pais}</p><p>{population}</p>
-          <p>{currency}</p><p>{languages}</p>
-
+          No search countries.
     </div>
   )
 }
-// <ul>
-// {capital.map(person => (
-//   <li key={person.name}>
-//   {person.name}
-//   </li>
-// ))}
-// </ul>
+const Form = (props) =>{
+  const { handleName, result, showDetail,
+       showValue, setShowValue, showIndice } = props
+  return(<div className="w3-tag w3-border">
+          Search city: <input className="w3-input" type="text"
+                              onChange={handleName} />
+          <Show result={result} showValue={showValue}
+          setShowValue={setShowValue} showDetail={showDetail}
+          showIndice={showIndice} />
+    </div>
+  )
+}
 const App = ()=> {
-  const [capital, setCapital] = useState([])
-  const [newName, setNewName] = useState('Brasília')
-
-  const url = "https://restcountries.com/"
+  const [city, setCity] = useState([])
+  const [newName, setNewName] = useState('')
+  // Definição da url no servidor local para teste
+  // const url = "http://localhost:3001"
   useEffect(() => {
-  console.log('effect')
   axios
-    .get(`${url}v2/all`).then(response => {
-      console.log('promise fulfilled')
-      setCapital(response.data)
+    .get(`/api/v1`).then(response => {
+      setCity(response.data);
     })
 }, [])
 
-// console.log('search: ',search);
-const newSearch = (event)=>{
+// console.log('city ', city);
+let selectedCountries = new RegExp(newName)
+const result = city.filter(newCity => newCity.name.common.search(selectedCountries) >= 0)
+// console.log('result Show', result);
+
+const handleName = (event)=>{
   const newName = event.target.value
-  setNewName(newName)
+  //Evitando resultados muito longos com apenas uma letra
+  if (newName.length > 1 && newName.length < 15) {
+    setNewName(newName)
+  }
 }
     return (
       <div className="App">
-        <Capital capital={capital} newName={newName} newSearch={newSearch} />
+        <Form newName={newName} result={result}
+              handleName={handleName} />
+
       </div>
     );
 

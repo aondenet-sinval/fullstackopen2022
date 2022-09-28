@@ -17,7 +17,7 @@ const Detail = (props)=>{
 
   }
   const { countries, index } = props
-  console.log('countries ', countries);
+  // console.log('countries ', countries);
 
     return(<div >
       <p className={
@@ -27,11 +27,11 @@ const Detail = (props)=>{
       <p className={
           show === 'w3-hide'
           ? show
-          : show}>Language native: {countries.nativeLanguage}</p>
+          : show}>Native language: {countries.nativeLanguage}</p>
       <p className={
           show === 'w3-hide'
           ? show
-          : show}>Subregião: {countries.subregion}</p>
+          : show}>Subregion: {countries.subregion}</p>
       <button name={index} type="submit" onClick={showDetail}>show/hide</button>
       </div>)
 }
@@ -57,10 +57,10 @@ const Show = ({result, showValue, setShowValue,
       paises.map((countries, index) => <li key={index}>
         <h1>{countries.name.common}</h1><br />
         <b>Capital:</b> {countries.capital}<br />
-        <b>Área:</b> {countries.area}<br />
-        <b>Região:</b> {countries.region}<br />
+        <b>Area:</b> {countries.area}<br />
+        <b>Region:</b> {countries.region}<br />
         <img width="50%" src={countries.flags.svg} alt="flag" />
-        <h3>Informe de clima atual:</h3>
+        <h3>Current weather report:</h3>
         <Temperature city={countries.capital} keyEnv={keyEnv} />
         </li>);
 

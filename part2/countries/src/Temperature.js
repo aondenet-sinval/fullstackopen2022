@@ -15,7 +15,7 @@ const Temperature = (props)=>{
     })
 }, [city]);
 
-console.log('isarray result ', Array.isArray(result));
+// console.log('is array result ', Array.isArray(result));
 const temperature = [];
 result.main
 ? temperature.push(result.main)
@@ -28,16 +28,16 @@ result.main
 //
 const selectedTemperature =
   temperature.map((weather, index) => <li key={index}>
-    <b>Umidade:</b> {weather.humidity}<br />
-    <b>Temperatura:</b> {
+    <b>Moisture:</b> {weather.humidity}<br />
+    <b>Temperature:</b> {
       weather.temp !== 0
       ? (weather.temp - 273.15).toFixed(2)
       : 0 }<br />
-    <b>Temp. máxima:</b> {
+    <b>Temp. maximum:</b> {
       weather.temp_min !== 0
       ? (weather.temp_min - 273.15).toFixed(2)
       : 0 }<br />
-    <b>Temp. mínima:</b> {
+    <b>Temp. minimum:</b> {
       weather.temp_min !== 0
       ? (weather.temp_min - 273.15).toFixed(2)
       : 0}<br />

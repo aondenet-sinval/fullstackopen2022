@@ -12,8 +12,8 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
-    "eject": "react-scripts eject",
-    "server": "json-server -p3001 --watch dbteste.json"
+    "eject": "react-scripts eject"
   },
-  "proxy": "https://restcountries.com"
+  "proxy": "https://restcountries.com",
+  "proxy": "https://api.openweathermap.org"
 }

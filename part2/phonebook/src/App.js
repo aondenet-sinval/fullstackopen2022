@@ -1,6 +1,19 @@
 import React, { useState, useEffect } from 'react'
-import axios from 'axios'
 import './App.css'
+import routesPhone from './services/routes'
+
+const phoneDel = (event) => {
+  const name = event.target.name
+  const id = event.target.value
+  const ok = confirm(`Deseja excluir ${name}?`)
+  if (ok) {
+    routesPhone
+      .trash(id)
+  }else{
+    alert(`Operação cancelada. ${name} não foi excluído.`)
+  }
+
+}
 
 const Filter = (props)=>{
   const { handleSearchName, searchName } = props
@@ -43,6 +56,10 @@ const Persons = ({persons})=>{
           {persons.map(person => (
             <li key={person.name}>
             {person.name} {person.number}
+              <button onClick={phoneDel} value={person.id}
+                name={person.name} >
+                  delete
+              </button>
             </li>
           ))}
           </ul>
@@ -55,8 +72,8 @@ const App = (props) => {
   const [ newPhone, setNewPhone ] = useState('')
   useEffect(() => {
   console.log('effect')
-  axios
-    .get('http://localhost:3001/persons')
+  routesPhone
+    .getAll()
     .then(response => {
       setPersons(response.data)
     })
@@ -71,11 +88,21 @@ const App = (props) => {
     //pesquisando se o nome existe
     let result = persons.find(pessoa => pessoa.name === newName);
     if (result) {
-      alert(`Err: The name ${result.name} exists number: ${result.number}`);
-    } else {
-      setPersons(persons.concat(nameObject))
-      setNewName('');
-      setNewPhone('');
+      const updateName = confirm(`Err: The name ${result.name}
+                        exists number: ${result.number}. See update click ok.`);
+      if (updateName) {
+        routesPhone
+        .update(result.id, nameObject)
+        .then(response => console.log(response))
+      }
+    }
+    if(!result){
+      routesPhone
+      .create(nameObject)
+      .then(response => console.log(response))
+      // setPersons(persons.concat(nameObject))
+      // setNewName('');
+      // setNewPhone('');
       console.log(`${newName} is already added to phonebook`);
     }
   }
@@ -90,6 +117,7 @@ const App = (props) => {
     const search = event.target.value;
     console.log('handleSearchName: ', search);
     let searchResult = persons.find(pessoa => pessoa.name === search);
+    console.log('searchResult ', searchResult);
     if (searchResult) {
       let result = `Nome: ${searchResult.name} número ${searchResult.number}.`
       setSearchName(result)

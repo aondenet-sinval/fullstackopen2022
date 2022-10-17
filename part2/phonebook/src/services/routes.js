@@ -1,6 +1,7 @@
 import axios from 'axios';
-
-const url = "http://localhost:3001/persons"
+const url = "http://localhost:3001/persons" //API part2
+// const url = "http://localhost:3001/api/persons" //API part3
+// const url = "/api/persons" //Heroku
 const getAll = ()=>{
   return axios.get(`${url}`)
 }

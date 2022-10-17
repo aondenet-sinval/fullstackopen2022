@@ -2,6 +2,30 @@ import React, { useState, useEffect } from 'react'
 import './App.css'
 import routesPhone from './services/routes'
 
+const ShowAdd = ({message}) => {
+  const styleMessage = {
+    color: 'green',
+    border: 'solid green',
+    borderRadius: 8,
+    maxWidth: 400,
+    fontSize: 16
+  }
+
+  if (message) {
+    return <div style={styleMessage}>{message}</div>
+  }
+  return null
+}
+const ShowError = ({messageError}) => {
+
+  if (messageError) {
+    return (<div className="error">
+    {messageError}
+    </div>)
+  }
+  return null
+}
+
 const phoneDel = (event) => {
   const name = event.target.name
   const id = event.target.value
@@ -10,7 +34,7 @@ const phoneDel = (event) => {
     routesPhone
       .trash(id)
   }else{
-    alert(`Operação cancelada. ${name} não foi excluído.`)
+    alert(`Operation cancelled. ${name} has not been deleted.`)
   }
 
 }
@@ -22,7 +46,7 @@ const Filter = (props)=>{
           <label>filter shown with:
           <input name="search" onBlur={handleSearchName} />
           </label>
-          <p>resultado:  {searchName}</p>
+          <p>result:  {searchName}</p>
         </div>
       )
 }
@@ -70,8 +94,11 @@ const App = (props) => {
   const [ newName, setNewName ] = useState('')
   const [ searchName, setSearchName ] = useState('search name')
   const [ newPhone, setNewPhone ] = useState('')
+  const  [message, setMessage ] = useState(null)
+  const [errorMessage, setErrorMessage] = useState(null)
+
   useEffect(() => {
-  console.log('effect')
+  // console.log('effect')
   routesPhone
     .getAll()
     .then(response => {
@@ -85,7 +112,7 @@ const App = (props) => {
       name: newName,
       number: newPhone
     }
-    //pesquisando se o nome existe
+    //searching if name exists
     let result = persons.find(pessoa => pessoa.name === newName);
     if (result) {
       const updateName = confirm(`Err: The name ${result.name}
@@ -93,7 +120,12 @@ const App = (props) => {
       if (updateName) {
         routesPhone
         .update(result.id, nameObject)
-        .then(response => console.log(response))
+        .catch(error => {
+          setErrorMessage(`Erro na alteração de ${result.name}.`)
+          setTimeout(()=>{
+            setErrorMessage(null)
+          }, 7000)
+        })
       }
     }
     if(!result){
@@ -101,7 +133,10 @@ const App = (props) => {
       .create(nameObject)
       .then(response => console.log(response))
       // setPersons(persons.concat(nameObject))
-      // setNewName('');
+      setMessage(`${newName} is already added to phonebook`);
+      setTimeout(() => {
+        setMessage(null)
+      }, 5000)
       // setNewPhone('');
       console.log(`${newName} is already added to phonebook`);
     }
@@ -112,14 +147,14 @@ const App = (props) => {
   const handlePhoneChange = (event) => {
     setNewPhone(event.target.value)
   }
-  //Pesquisa de nomes
+  //name search
   const handleSearchName = (event) => {
     const search = event.target.value;
-    console.log('handleSearchName: ', search);
+    // console.log('handleSearchName: ', search);
     let searchResult = persons.find(pessoa => pessoa.name === search);
-    console.log('searchResult ', searchResult);
+    // console.log('searchResult ', searchResult);
     if (searchResult) {
-      let result = `Nome: ${searchResult.name} número ${searchResult.number}.`
+      let result = `Name: ${searchResult.name} number: ${searchResult.number}.`
       setSearchName(result)
     }
   }
@@ -131,14 +166,15 @@ const App = (props) => {
       <Filter searchName={searchName}
         handleSearchName={handleSearchName}
          />
-      <h3>Cadastro</h3>
+      <h3>Registration</h3>
+      <ShowAdd message={message}/>
+      <ShowError messageError={errorMessage}/>
       <PersonForm
         addName={addName} handleNameChange={handleNameChange}
         handlePhoneChange={handlePhoneChange} newName={newName}
         newPhone={newPhone}
         />
       <h2>Numbers</h2>
-      <div>debug: {newName} {newPhone}</div>
       <Persons persons={persons} />
     </div>
   )
